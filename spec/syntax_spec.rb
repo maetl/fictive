@@ -1,9 +1,9 @@
-require './syntax'
+require 'spec_helper'
 
-describe Syntax do
+describe Fictive::Syntax do
   describe '#parse' do
     def parser_test_case(case_id)
-      Syntax::Parser.new(File.read("./spec/cases/#{case_id}.txt"))
+      Fictive::Syntax::Parser.new(File.read("./spec/cases/#{case_id}.txt"))
     end
 
     it 'parses single paragraph' do

@@ -1,8 +1,8 @@
-require './story'
+require 'spec_helper'
 
-describe Story do
+describe Fictive::Story do
   let(:story) do
-    Story.demo
+    Fictive::Story.demo
   end
 
   specify '#has_next?' do
