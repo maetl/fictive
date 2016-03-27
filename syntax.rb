@@ -53,8 +53,14 @@ module Syntax
     end
 
     def parse_atx_header
-      text = scan_to_eol
-      Element.new(:header, text)
+      level = 1
+      level += 1 while @scanner.scan(/#/)
+
+      if @scanner.scan(/\s/)
+        Element.new("h#{level}".to_sym, scan_to_eol)
+      else
+        Element.new(:id, scan_to_eol)
+      end
     end
 
     def parse_paragraph
