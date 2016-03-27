@@ -31,18 +31,17 @@ module Syntax
     private
 
     def parse_block_level(element)
-      text = @scanner.scan_until(/#{EOL}/)
+      text = @scanner.scan_until(/#{EOL}/).rstrip
 
-      paragraph = Element.new(text.rstrip)
-      element.children << paragraph
+      if text.empty?
+        element.children << Element.new
+      else
+        element.children << Element.new(text)
+      end
 
       parse_block_level(element) unless @scanner.eos?
 
       element
-    end
-
-    def parse_paragraph_level(element)
-
     end
 
     def clean_input(input)
