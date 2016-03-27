@@ -2,10 +2,12 @@ require 'strscan'
 
 module Syntax
   class Element
-    attr_accessor :content, :children
+    attr_reader :type, :text
+    attr_accessor :children
 
-    def initialize(content = nil)
-      @content = content
+    def initialize(type, text = nil)
+      @type = type
+      @text = text
       @children = []
     end
 
@@ -22,26 +24,46 @@ module Syntax
     end
 
     def parse
-      @scanner = StringScanner.new(@input)
-      @root = Element.new
-      parse_block_level(@root)
-      @root
+      reset_parser
+
+      document = Element.new(:document)
+
+      while !@scanner.eos?
+        document.children << parse_block_level
+      end
+
+      document
     end
 
     private
 
-    def parse_block_level(element)
-      text = @scanner.scan_until(/#{EOL}/).rstrip
+    def reset_parser
+      @scanner = StringScanner.new(@input)
+    end
 
-      if text.empty?
-        element.children << Element.new
-      else
-        element.children << Element.new(text)
-      end
+    def parse_block_level
+      return parse_atx_header if @scanner.scan(/#/)
+      return parse_blank_line if @scanner.scan(/#{EOL}/)
 
-      parse_block_level(element) unless @scanner.eos?
+      parse_paragraph
+    end
 
-      element
+    def parse_blank_line
+      Element.new(:blank_line)
+    end
+
+    def parse_atx_header
+      text = scan_to_eol
+      Element.new(:header, text)
+    end
+
+    def parse_paragraph
+      text = scan_to_eol
+      Element.new(:paragraph, text)
+    end
+
+    def scan_to_eol
+      @scanner.scan_until(/#{EOL}/).rstrip
     end
 
     def clean_input(input)
