@@ -45,6 +45,7 @@ module Fictive
       def parse_block_level
         return parse_atx_header if @scanner.scan(/#/)
         return parse_blank_line if @scanner.scan(/#{EOL}/)
+        return parse_list_item if @scanner.scan(/-/)
 
         parse_paragraph
       end
@@ -61,6 +62,14 @@ module Fictive
           Element.new("h#{level}".to_sym, scan_to_eol)
         else
           Element.new(:id, scan_to_eol)
+        end
+      end
+
+      def parse_list_item
+        if @scanner.scan(/\s/)
+          Element.new(:list_item, scan_to_eol)
+        else
+          parse_paragraph
         end
       end
 

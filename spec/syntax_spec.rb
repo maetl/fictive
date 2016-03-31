@@ -37,5 +37,15 @@ describe Fictive::Syntax do
       expect(parser.parse.children[4].type).to eq(:h3)
       expect(parser.parse.children[4].text).to eq('Heading 3')
     end
+
+    it 'parses list items' do
+      parser = parser_test_case(5)
+      expect(parser.parse.children[0].type).to eq(:paragraph)
+      expect(parser.parse.children[0].text).to eq('This is a paragraph.')
+      expect(parser.parse.children[2].type).to eq(:list_item)
+      expect(parser.parse.children[2].text).to eq('This is a list item')
+      expect(parser.parse.children[3].type).to eq(:list_item)
+      expect(parser.parse.children[3].text).to eq('This is also a list item')
+    end
   end
 end
