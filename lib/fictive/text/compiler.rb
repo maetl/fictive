@@ -29,6 +29,8 @@ module Fictive
     end
 
     class ConditionalNode
+      # TODO: decide on array or explicit parameter convention
+      #       eg: initialize(condition, consequent, alternative)
       def initialize(condition, consequent)
         @condition = condition
         @consequent = consequent
