@@ -2,31 +2,31 @@ module Fictive
   class Story
     def self.demo
       self.new([
-        Scene.new({path: 'hello', choices: [Choice.new({path: 'goodbye'})]}, 'Hello world'),
-        Scene.new({path: 'goodbye'}, 'Goodbye world')
+        Passage.new({path: 'hello', choices: [Choice.new({path: 'goodbye'})]}, 'Hello world'),
+        Passage.new({path: 'goodbye'}, 'Goodbye world')
       ])
     end
 
-    def initialize(scenes)
-      @scenes = scenes
-      @scenes_index = {}
-      @scenes.each_with_index do |scene, id|
-        @scenes_index[scene.path] = id
+    def initialize(passages)
+      @passages = passages
+      @passages_index = {}
+      @passages.each_with_index do |passage, id|
+        @passages_index[passage.path] = id
       end
 
       @index = 0
     end
 
     def has_next?
-      !@scenes.at(@index).nil? && !@scenes.at(@index + 1).nil?
+      !@passages.at(@index).nil? && !@passages.at(@index + 1).nil?
     end
 
     def next
-      @scenes.at(@index)
+      @passages.at(@index)
     end
 
     def choose_path(path)
-      @index = @scenes_index[path]
+      @index = @passages_index[path]
     end
   end
 end

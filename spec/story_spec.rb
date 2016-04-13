@@ -10,9 +10,9 @@ describe Fictive::Story do
   end
 
   specify '#next' do
-    scene = story.next
-    expect(scene.path).to eq('hello')
-    expect(scene.choices.count).to eq(1)
+    passage = story.next
+    expect(passage.path).to eq('hello')
+    expect(passage.choices.count).to eq(1)
   end
 
   specify '#choose_path' do

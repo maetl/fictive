@@ -1,5 +1,5 @@
 module Fictive
-  class Scene
+  class Passage
     attr_reader :passage
 
     def initialize(metadata, passage)
