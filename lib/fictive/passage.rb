@@ -1,10 +1,10 @@
 module Fictive
   class Passage
-    attr_reader :passage
+    attr_reader :text
 
-    def initialize(metadata, passage)
+    def initialize(metadata, text)
       @metadata = metadata
-      @passage = passage
+      @text = text
     end
 
     def path
