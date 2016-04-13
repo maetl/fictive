@@ -2,8 +2,8 @@ module Fictive
   class Story
     def self.demo
       self.new([
-        Passage.new({path: 'hello', choices: [Choice.new({path: 'goodbye'})]}, 'Hello world'),
-        Passage.new({path: 'goodbye'}, 'Goodbye world')
+        Passage.new({id: 'hello', choices: [Choice.new({id: 'goodbye'})]}, 'Hello world'),
+        Passage.new({id: 'goodbye'}, 'Goodbye world')
       ])
     end
 
@@ -11,7 +11,7 @@ module Fictive
       @passages = passages
       @passages_index = {}
       @passages.each_with_index do |passage, id|
-        @passages_index[passage.path] = id
+        @passages_index[passage.id] = id
       end
 
       @index = 0
@@ -25,8 +25,8 @@ module Fictive
       @passages.at(@index)
     end
 
-    def choose_path(path)
-      @index = @passages_index[path]
+    def choose_path(id)
+      @index = @passages_index[id]
     end
   end
 end

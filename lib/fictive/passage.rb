@@ -7,8 +7,8 @@ module Fictive
       @text = text
     end
 
-    def path
-      @metadata.fetch(:path)
+    def id
+      @metadata.fetch(:id)
     end
 
     def choices

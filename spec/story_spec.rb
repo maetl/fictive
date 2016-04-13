@@ -11,14 +11,14 @@ describe Fictive::Story do
 
   specify '#next' do
     passage = story.next
-    expect(passage.path).to eq('hello')
+    expect(passage.id).to eq('hello')
     expect(passage.choices.count).to eq(1)
   end
 
   specify '#choose_path' do
-    path = story.next.choices.first.path
-    story.choose_path(path)
-    expect(story.next.path).to eq('goodbye')
+    id = story.next.choices.first.id
+    story.choose_path(id)
+    expect(story.next.id).to eq('goodbye')
     expect(story.has_next?).to be false
   end
 end

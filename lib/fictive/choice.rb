@@ -4,8 +4,8 @@ module Fictive
       @metadata = metadata
     end
 
-    def path
-      @metadata.fetch(:path)
+    def id
+      @metadata.fetch(:id)
     end
   end
 end
