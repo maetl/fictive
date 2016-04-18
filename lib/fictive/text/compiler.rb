@@ -10,12 +10,18 @@ module Fictive
       def process
         @scanner = StringScanner.new(@input)
 
-        Fictive::Text::Node.new(*parse_fragment)
+        Fictive::Text::Node.new(*parse_fragments)
       end
 
       private
 
       attr_reader :scanner
+
+      def parse_fragments
+        fragments = []
+        fragments << parse_fragment while !scanner.eos?
+        fragments
+      end
 
       def parse_fragment
         concat_fragment = scanner.scan_until(/{/)
@@ -23,10 +29,10 @@ module Fictive
         if concat_fragment
           [Fictive::Text::TextNode.new(concat_fragment.gsub(/{/, '')), parse_substitution]
         else
-          concat_before_directive = scanner.scan_until(/\*/)
+          concat_before_directive = scanner.scan_until(/~/)
 
           if concat_before_directive
-            [Fictive::Text::TextNode.new(concat_before_directive.gsub(/\*/, '')), parse_directive]
+            Fictive::Text::Node.new(Fictive::Text::TextNode.new(concat_before_directive.gsub(/~/, '')), parse_directive)
           else
             fragment = scanner.scan(/.+/)
             Fictive::Text::TextNode.new(fragment)
@@ -58,7 +64,7 @@ module Fictive
         expression = parse_expression
         scanner.skip(/:/)
         scanner.skip(/\s/)
-        consequent = scanner.scan_until(/\*/).gsub(/\*/, '')
+        consequent = scanner.scan_until(/~/).gsub(/~/, '')
 
         Fictive::Text::ConditionalNode.new(
           Fictive::Text::ExpressionNode.new(
