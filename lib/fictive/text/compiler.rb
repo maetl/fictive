@@ -27,7 +27,7 @@ module Fictive
         concat_fragment = scanner.scan_until(/{/)
 
         if concat_fragment
-          [Fictive::Text::TextNode.new(concat_fragment.gsub(/{/, '')), parse_substitution]
+          Fictive::Text::Node.new(Fictive::Text::TextNode.new(concat_fragment.gsub(/{/, '')), parse_substitution)
         else
           concat_before_directive = scanner.scan_until(/~/)
 
