@@ -21,33 +21,44 @@ module Fictive
         concat_fragment = scanner.scan_until(/{/)
 
         if concat_fragment
-          [Fictive::Text::TextNode.new(concat_fragment.gsub(/{/, '')), parse_delimiter]
+          [Fictive::Text::TextNode.new(concat_fragment.gsub(/{/, '')), parse_substitution]
         else
-          fragment = scanner.scan(/.+/)
-          Fictive::Text::TextNode.new(fragment)
+          concat_before_directive = scanner.scan_until(/\*/)
+
+          if concat_before_directive
+            [Fictive::Text::TextNode.new(concat_before_directive.gsub(/\*/, '')), parse_directive]
+          else
+            fragment = scanner.scan(/.+/)
+            Fictive::Text::TextNode.new(fragment)
+          end
         end
       end
 
-      def parse_delimiter
-        if scanner.scan(/{/)
-          parse_tag
-        else
-          parse_substitution
-        end
+      def parse_directive
+        return parse_conditional if scanner.scan(/if/)
+
+        raise 'Invalid syntax'
       end
 
-      def parse_tag
-        scanner.skip(/\s+/)
+      def parse_substitution
+        scanner.skip(/\s/)
 
-        parse_conditional if scanner.scan(/if/)
+        if reference = scanner.scan(/[A-Za-z0-9_\-!]/)
+          Fictive::Text::ReferenceNode.new(reference, {})
+        else
+          raise 'Invalid syntax'
+        end
+
+        scanner.skip(/\s*}/)
       end
 
       def parse_conditional
         raise 'missing whitespace in conditional tag' unless scanner.scan(/\s+/)
 
         expression = parse_expression
-        scanner.skip(/}}/)
-        consequent = scanner.scan_until(/{{\/if}}/).gsub(/{{\/if}}/, '')
+        scanner.skip(/:/)
+        scanner.skip(/\s/)
+        consequent = scanner.scan_until(/\*/).gsub(/\*/, '')
 
         Fictive::Text::ConditionalNode.new(
           Fictive::Text::ExpressionNode.new(
@@ -59,10 +70,6 @@ module Fictive
 
       def parse_expression
         Fictive::Text::TrueNode.new if scanner.scan(/true/)
-      end
-
-      def parse_substitution
-
       end
     end
 
@@ -85,6 +92,17 @@ module Fictive
 
       def evaluate
         @text
+      end
+    end
+
+    class ReferenceNode
+      def initialize(reference, symbol_table)
+        @reference = reference
+        @symbol_table = symbol_table
+      end
+
+      def evaluate
+        @symbol_table.fetch(@reference)
       end
     end
 

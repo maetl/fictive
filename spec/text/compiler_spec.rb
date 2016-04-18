@@ -3,14 +3,19 @@ require 'spec_helper'
 describe Fictive::Text::Compiler do
 
   describe '#process' do
-    it 'should build node from literal text' do
+    it 'should evaluate node from literal text' do
       node = Fictive::Text::Compiler.new("literal text").process
       expect(node.evaluate).to eq("literal text")
     end
 
-    it 'should build conditional node from expression' do
-      node = Fictive::Text::Compiler.new("{{if true}}hello{{/if}}").process
+    it 'should evaluate conditional node from directive' do
+      node = Fictive::Text::Compiler.new("*if true: hello*").process
       expect(node.evaluate).to eq("hello")
+    end
+
+    it 'should concatenate conditional node from directive' do
+      node = Fictive::Text::Compiler.new("Colorless *if true: green ideas.*").process
+      expect(node.evaluate).to eq("Colorless green ideas.")
     end
   end
 
