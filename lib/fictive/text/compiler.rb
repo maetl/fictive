@@ -7,7 +7,8 @@ module Fictive
         @input = input
       end
 
-      def process
+      def process(symbol_table={})
+        @symbol_table = symbol_table
         @scanner = StringScanner.new(@input)
 
         Fictive::Text::Node.new(*parse_fragments)
@@ -49,13 +50,12 @@ module Fictive
       def parse_substitution
         scanner.skip(/\s/)
 
-        if reference = scanner.scan(/[A-Za-z0-9_\-!]/)
-          Fictive::Text::ReferenceNode.new(reference, {})
+        if reference = scanner.scan(/[A-Za-z0-9_\-!]+/)
+          scanner.skip(/\s*}/)
+          Fictive::Text::ReferenceNode.new(reference, @symbol_table)
         else
           raise 'Invalid syntax'
         end
-
-        scanner.skip(/\s*}/)
       end
 
       def parse_conditional
@@ -103,7 +103,7 @@ module Fictive
 
     class ReferenceNode
       def initialize(reference, symbol_table)
-        @reference = reference
+        @reference = reference.to_sym
         @symbol_table = symbol_table
       end
 

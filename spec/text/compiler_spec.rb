@@ -8,6 +8,22 @@ describe Fictive::Text::Compiler do
       expect(node.evaluate).to eq("literal text")
     end
 
+    it 'should evaluate text substitution with concatenation' do
+      node = Fictive::Text::Compiler.new("Hello {world}.").process(world: "World")
+      expect(node.evaluate).to eq("Hello World.")
+    end
+
+    it 'should evaluate text substitution over whole string' do
+      node = Fictive::Text::Compiler.new("{world}").process(world: "Hello World.")
+      expect(node.evaluate).to eq("Hello World.")
+    end
+
+    it 'should evaluate multiple text substitutions with concatenation' do
+      compiler = Fictive::Text::Compiler.new("{hello} {world}.")
+      node = compiler.process(hello: "Hello", world: "World")
+      expect(node.evaluate).to eq("Hello World.")
+    end
+
     it 'should evaluate conditional node from directive' do
       node = Fictive::Text::Compiler.new("~if true: hello~").process
       expect(node.evaluate).to eq("hello")
