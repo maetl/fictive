@@ -74,8 +74,24 @@ module Fictive
       end
 
       def parse_paragraph
-        text = scan_to_eol
-        Element.new(:paragraph, text)
+        parts = []
+        text = scan_paragraph_line
+
+        if text
+          parts << text.rstrip
+
+          while !@scanner.match?(/\n/)
+            next_text = scan_paragraph_line
+            break unless next_text
+            parts << next_text.rstrip
+          end
+
+          Element.new(:paragraph, parts.join(' '))
+        end
+      end
+
+      def scan_paragraph_line
+        @scanner.scan_until(/\n/)
       end
 
       def scan_to_eol

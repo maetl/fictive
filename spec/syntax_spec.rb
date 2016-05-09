@@ -47,5 +47,13 @@ describe Fictive::Syntax do
       expect(parser.parse.children[3].type).to eq(:list_item)
       expect(parser.parse.children[3].text).to eq('This is also a list item')
     end
+
+    it 'parses paragraph content over multiple lines' do
+      parser = parser_test_case(6)
+      expect(parser.parse.children.first.type).to eq(:paragraph)
+      expect(parser.parse.children.first.text).to eq('This is a paragraph which breaks over multiple lines.')
+      expect(parser.parse.children.first.type).to eq(:paragraph)
+      expect(parser.parse.children.last.text).to eq('This is also a paragraph which breaks over multiple lines.')
+    end
   end
 end
