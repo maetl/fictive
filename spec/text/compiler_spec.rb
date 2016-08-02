@@ -25,17 +25,17 @@ describe Fictive::Text::Compiler do
     end
 
     it 'should evaluate conditional node from directive' do
-      node = Fictive::Text::Compiler.new("~if true: hello~").process
+      node = Fictive::Text::Compiler.new("/if true: hello/").process
       expect(node.evaluate).to eq("hello")
     end
 
     it 'should concatenate conditional node from directive' do
-      node = Fictive::Text::Compiler.new("Colorless ~if true: green ideas.~").process
+      node = Fictive::Text::Compiler.new("Colorless /if true: green ideas./").process
       expect(node.evaluate).to eq("Colorless green ideas.")
     end
 
     it 'should concatenate head and tails around conditional node from directive' do
-      node = Fictive::Text::Compiler.new("Colorless ~if true: green ideas~ sleep furiously.").process
+      node = Fictive::Text::Compiler.new("Colorless /if true: green ideas/ sleep furiously.").process
       expect(node.evaluate).to eq("Colorless green ideas sleep furiously.")
     end
   end
