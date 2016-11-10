@@ -1,11 +1,11 @@
 module Fictive
   class Choice
-    def initialize(metadata)
-      @metadata = metadata
+    def initialize(edge)
+      @edge = edge
     end
 
     def id
-      @metadata.fetch(:id)
+      @edge.id
     end
   end
 end

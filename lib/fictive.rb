@@ -1,3 +1,5 @@
+require 'mementus'
+
 require 'fictive/version'
 require 'fictive/story'
 require 'fictive/choice'

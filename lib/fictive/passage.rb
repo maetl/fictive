@@ -1,18 +1,15 @@
 module Fictive
   class Passage
-    attr_reader :text
-
-    def initialize(metadata, text)
-      @metadata = metadata
-      @text = text
+    def initialize(node)
+      @node = node
     end
 
     def id
-      @metadata.fetch(:id)
+      @node.id
     end
 
     def choices
-      @metadata.fetch(:choices, [])
+      @node.out_e.all.map { |e| Choice.new(e) }
     end
   end
 end
