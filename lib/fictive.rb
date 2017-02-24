@@ -1,6 +1,8 @@
+require 'pathname'
 require 'mementus'
 
 require 'fictive/version'
+require 'fictive/bundle'
 require 'fictive/story'
 require 'fictive/choice'
 require 'fictive/passage'
