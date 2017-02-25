@@ -17,7 +17,7 @@ module Fictive
     attr_reader :documents
 
     def initialize(files)
-      @documents = files.map { |file| file.read }.freeze
+      @documents = files.map { |file| Document.new(file.read) }.freeze
     end
   end
 end

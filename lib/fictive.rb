@@ -3,6 +3,7 @@ require 'mementus'
 
 require 'fictive/version'
 require 'fictive/bundle'
+require 'fictive/document'
 require 'fictive/story'
 require 'fictive/choice'
 require 'fictive/passage'
