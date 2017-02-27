@@ -19,5 +19,16 @@ module Fictive
     def initialize(files)
       @documents = files.map { |file| Document.new(file.read) }.freeze
     end
+
+    def passages
+      # Bad code fix it
+      fragments = []
+
+      @documents.each do |document|
+        fragments.concat(document.passages)
+      end
+
+      fragments
+    end
   end
 end

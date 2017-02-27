@@ -26,6 +26,9 @@ describe Fictive::Bundle do
 
       expect(bundle).to be_a(Fictive::Bundle)
       expect(bundle.documents.count).to eq(2)
+      expect(bundle.passages.count).to eq(2)
+
+      p bundle.passages
     end
   end
 end
