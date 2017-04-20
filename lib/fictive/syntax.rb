@@ -44,6 +44,7 @@ module Fictive
 
       def parse_block_level
         return parse_atx_header if @scanner.scan(/#/)
+        return parse_passage_break if @scanner.scan(/§|\*/)
         return parse_blank_line if @scanner.scan(/#{EOL}/)
         return parse_list_item if @scanner.scan(/-/)
 
@@ -54,7 +55,13 @@ module Fictive
         Element.new(:blank_line)
       end
 
+      def parse_passage_break
+        Element.new(:passage_break)
+      end
+
       def parse_atx_header
+        return parse_passage_break if @scanner.scan(/#{EOL}/)
+
         level = 1
         level += 1 while @scanner.scan(/#/)
 

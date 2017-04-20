@@ -1,0 +1,13 @@
+First passage without an ID or heading marker. And it can go on and on and on and on.
+
+Second paragraph in the first passage. And it continues on for a bit then stops.
+
+§
+
+Second passage marked by a section symbol. And it goes on for a bit then breaks.
+
+Second paragraph in the second passage. The mid way point of the document.
+
+§
+
+First paragraph in the third and final passage. Also the last paragraph of the document.

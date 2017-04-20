@@ -13,7 +13,7 @@ describe Fictive::Bundle do
       bundle = Fictive::Bundle.import('./spec/cases/')
 
       expect(bundle).to be_a(Fictive::Bundle)
-      expect(bundle.documents.count).to eq(6)
+      expect(bundle.documents.count).to eq(7)
     end
   end
 
