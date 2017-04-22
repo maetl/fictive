@@ -8,4 +8,4 @@ This is a very basic, very sketchy draft extraction of some of the components I 
 
 ## License
 
-MIT for now. Copyright (c) 2015-2016 [Editorial Technology](http://editorial.technology). See the `LICENSE` file at the root of this software distribution for more information.
+Copyright (c) 2015-2016 [Editorial Technology](http://editorial.technology). See the `LICENSE` file at the root of this software distribution for more information.
