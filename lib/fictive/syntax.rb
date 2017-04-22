@@ -43,12 +43,36 @@ module Fictive
       end
 
       def parse_block_level
+        return parse_blockquote if @scanner.scan(/>/)
         return parse_atx_header if @scanner.scan(/#/)
         return parse_passage_break if @scanner.scan(/§|\*/)
         return parse_blank_line if @scanner.scan(/#{EOL}/)
         return parse_list_item if @scanner.scan(/-/)
 
         parse_paragraph
+      end
+
+      def parse_blockquote
+        parts = []
+        text = scan_line_with_quoted_space
+
+        if text
+          parts << text.rstrip
+
+          while !@scanner.match?(/\n/)
+            next_text = scan_line_with_quoted_space
+            break unless next_text
+            parts << next_text.rstrip
+          end
+
+          Element.new(:blockquote, parts.join(' '))
+        end
+      end
+
+      def scan_line_with_quoted_space
+        @scanner.skip(/>/)
+        @scanner.skip(/\s+/)
+        @scanner.scan_until(/\n/)
       end
 
       def parse_blank_line

@@ -68,5 +68,15 @@ describe Fictive::Syntax do
       expect(children[5].type).to eq(:passage_break)
       expect(children[6].type).to eq(:paragraph)
     end
+
+    specify 'blockquote' do |spec|
+      document = parse_document(spec.description)
+      expect(document.children[0].type).to eq(:paragraph)
+      expect(document.children[1].type).to eq(:blank_line)
+      expect(document.children[2].type).to eq(:blockquote)
+      expect(document.children[2].text).to eq("One. One. Two. Two. Three. Three.")
+      expect(document.children[1].type).to eq(:blank_line)
+      expect(document.children[0].type).to eq(:paragraph)
+    end
   end
 end
