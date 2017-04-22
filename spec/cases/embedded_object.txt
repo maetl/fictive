@@ -1,0 +1,7 @@
+This is a paragraph about some stuff.
+
+~~~
+This is an embedded media object.
+~~~
+
+This is a final paragraph.

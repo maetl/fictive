@@ -43,6 +43,7 @@ module Fictive
       end
 
       def parse_block_level
+        return parse_embed if @scanner.scan(/~~~#{EOL}/)
         return parse_blockquote if @scanner.scan(/>\s+/)
         return parse_atx_header if @scanner.scan(/#/)
         return parse_passage_break if @scanner.scan(/§|\*/)
@@ -50,6 +51,17 @@ module Fictive
         return parse_list_item if @scanner.scan(/-/)
 
         parse_paragraph
+      end
+
+      def scan_up_until(pattern)
+        chars = @scanner.scan_until(/#{pattern}/)
+        #raise error unless chars
+        chars.slice(0, chars.size - pattern.size)
+      end
+
+      def parse_embed
+        #document = Parser.new(scan_up_until("#{EOL}~~~#{EOL}")).parse
+        Element.new(:embedded_object, scan_up_until("#{EOL}~~~#{EOL}"))
       end
 
       def parse_blockquote
@@ -113,6 +125,10 @@ module Fictive
 
       def scan_to_eol
         @scanner.scan_until(/#{EOL}/).rstrip
+      end
+
+      def scan_to_marker
+        @scanner.scan_until(/~~~#{EOL}/).rstrip
       end
 
       def clean_input(input)
