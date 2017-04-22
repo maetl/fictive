@@ -43,7 +43,7 @@ module Fictive
       end
 
       def parse_block_level
-        return parse_blockquote if @scanner.scan(/>/)
+        return parse_blockquote if @scanner.scan(/>\s+/)
         return parse_atx_header if @scanner.scan(/#/)
         return parse_passage_break if @scanner.scan(/§|\*/)
         return parse_blank_line if @scanner.scan(/#{EOL}/)
@@ -53,26 +53,33 @@ module Fictive
       end
 
       def parse_blockquote
+        parse_multiline_block(:blockquote, />\s+/)
+      end
+
+      def parse_paragraph
+        parse_multiline_block(:paragraph)
+      end
+
+      def parse_multiline_block(element_type, skip_indent=false)
         parts = []
-        text = scan_line_with_quoted_space
+        text = scan_line(skip_indent)
 
         if text
           parts << text.rstrip
 
-          while !@scanner.match?(/\n/)
-            next_text = scan_line_with_quoted_space
+          while !@scanner.match?(/#{EOL}/)
+            next_text = scan_line(skip_indent)
             break unless next_text
             parts << next_text.rstrip
           end
 
-          Element.new(:blockquote, parts.join(' '))
+          Element.new(element_type, parts.join(' '))
         end
       end
 
-      def scan_line_with_quoted_space
-        @scanner.skip(/>/)
-        @scanner.skip(/\s+/)
-        @scanner.scan_until(/\n/)
+      def scan_line(skip_indent)
+        @scanner.skip(skip_indent) if skip_indent
+        @scanner.scan_until(/#{EOL}/)
       end
 
       def parse_blank_line
@@ -102,27 +109,6 @@ module Fictive
         else
           parse_paragraph
         end
-      end
-
-      def parse_paragraph
-        parts = []
-        text = scan_paragraph_line
-
-        if text
-          parts << text.rstrip
-
-          while !@scanner.match?(/\n/)
-            next_text = scan_paragraph_line
-            break unless next_text
-            parts << next_text.rstrip
-          end
-
-          Element.new(:paragraph, parts.join(' '))
-        end
-      end
-
-      def scan_paragraph_line
-        @scanner.scan_until(/\n/)
       end
 
       def scan_to_eol
