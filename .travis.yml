@@ -5,5 +5,5 @@ rvm:
   - 2.4.1
   - ruby-head
   - jruby-9
-install: gem install rspec
+install: gem install rspec mementus
 script: rspec
